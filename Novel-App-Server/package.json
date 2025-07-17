@@ -1,0 +1,16 @@
+{
+  "name": "novel-app-server",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "Ryuu",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "start": "node --env-file=.env --watch index.js",
+    "dev": "node --watch --trace-warnings --env-file=.env index.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}

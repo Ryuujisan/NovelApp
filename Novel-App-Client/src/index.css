@@ -1,0 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Coming+Soon&family=Pacifico&family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap');
+@import "tailwindcss";
+
+body{
+    background-color: #292626;
+    color: aliceblue;
+    font-family: "Urbanist", sans-serif;
+    overflow-x: hidden;
+    width: 100vw;
+}
+
+.content{
+    font-family: 'Comic Sans MS', cursive;
+}
+
+.primary-color{
+    background-color: #030637;
+}
+
+.logo{
+    background-image: url("https://thumbs.dreamstime.com/b/flying-magic-books-library-367534733.jpg?w=992");
+    background-repeat: round;
+    background-size: cover;
+}
+
+.web-title{
+    font-family: "Pacifico" , cursive;
+    -webkit-text-stroke: 1px #030637;
+}
+.web-title-additional{
+    font-family: "Comic Sans MS" , cursive;
+}
+
+.link{
+    @apply: "hover:transition duration-300 duration-100 textcolor-violet-500 underline";
+}
