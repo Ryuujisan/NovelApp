@@ -1,7 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import App from './App.jsx'
 import {
     createBrowserRouter,
     RouterProvider,
@@ -17,6 +16,7 @@ import Series from "./routes/Series.jsx";
 import Read from "./routes/Read.jsx";
 import Write from "./routes/Write.jsx";
 import Dashboard from "./routes/Dashboard.jsx";
+import Search from "./routes/Search.jsx";
 
 const routes = createBrowserRouter([
     {
@@ -35,7 +35,7 @@ const routes = createBrowserRouter([
                 element: <ReadingList />,
             },
             {
-              path: "/:series",
+              path: "/series/:seriesId",
               element: <Series />,
             },
             {
@@ -43,7 +43,7 @@ const routes = createBrowserRouter([
               element: <Read />,
             },
             {
-                path:"/:write",
+                path:"/write",
                 element: <Write />,
             },
             {
@@ -53,6 +53,10 @@ const routes = createBrowserRouter([
             {
                 path:"/dashboard",
                 element: <Dashboard />,
+            },
+            {
+                path: "/search/:search",
+                element: <Search />,
             }
         ]
     }
