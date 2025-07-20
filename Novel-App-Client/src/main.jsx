@@ -17,6 +17,7 @@ import Read from "./routes/Read.jsx";
 import Write from "./routes/Write.jsx";
 import Dashboard from "./routes/Dashboard.jsx";
 import Search from "./routes/Search.jsx";
+import Login from './componets/login.jsx';
 
 const routes = createBrowserRouter([
     {
@@ -29,6 +30,11 @@ const routes = createBrowserRouter([
             {
                 path: "/",
                 element: <HomePage />,
+            },
+            {
+                path: "/login",
+                element: <Login />
+
             },
             {
                 path:"/:slug",
