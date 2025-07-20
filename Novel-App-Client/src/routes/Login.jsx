@@ -1,3 +1,6 @@
+import {Link} from "react-router";
+import GoogleButton from 'react-google-button'
+
 const Login = () => {
     return (
         <div className={`flex justify-center `}>
@@ -50,8 +53,14 @@ const Login = () => {
                 </label>
 
                 <button className="btn btn-neutral mt-4">Login</button>
-            </fieldset>
 
+                <span className={`text-center block`}>You dont have account? <Link to={"/register"} className={``}>Sign out</Link> </span>
+                <span className={`text-center block`}>OR</span>
+                <div className={`m-auto`}>
+                    <GoogleButton />
+                </div>
+
+            </fieldset>
         </div>
     )
 };
