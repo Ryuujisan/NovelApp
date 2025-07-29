@@ -18,3 +18,12 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
 
 };
+
+export const checkAuth = async (req, res) => {
+  const body = req.body;
+  const token = req.user;
+
+  try {
+
+  }
+};

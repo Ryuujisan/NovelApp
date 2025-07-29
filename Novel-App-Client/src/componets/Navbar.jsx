@@ -1,9 +1,16 @@
+import {useAuthStore} from "../store/useAuthStore.js";
+import {Link} from "react-router";
+import LoginMenu from "./LoginMenu.jsx";
 
 const Navbar = () => {
     /*TODO:
     Make auth settings
     * */
+    const {authUser} = useAuthStore();
+    console.log(authUser);
     return(
+
+
         <div className={``}>
             <div className="navbar bg-base-200 shadow-sm">
                 {/*Drop Down*/}
@@ -14,9 +21,10 @@ const Navbar = () => {
                     <ul
                         tabIndex={0}
                         className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-                        <li><a>Homepage</a></li>
-                        <li><a>Portfolio</a></li>
-                        <li><a>About</a></li>
+                        <li><Link a = {`/`}>Homepage</Link></li>
+                        <li><Link a = {`/`}>Forum</Link></li>
+                        <li><Link a = {`/`}>Reading...</Link></li>
+                        <li><Link a = {`/`} className={`{authUser === null ? hidden :""}`}>Create</Link></li>
                     </ul>
                 </div>
 
@@ -30,20 +38,13 @@ const Navbar = () => {
                             <div className="w-10 rounded-full">
                                 <img
                                     alt="Avatar"
-                                    src="/avatar.png" />
+                                    src={authUser !== null ? authUser.fbUser.photoURL: '/avatar.png'} />
                             </div>
                         </div>
-                        <ul
-                            tabIndex={0}
-                            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-                            <li>
-                                <a className="justify-between">
-                                    Profile
-                                </a>
-                            </li>
-                            <li><a>Settings</a></li>
-                            <li><a>Logout</a></li>
-                        </ul>
+                        {/*Login Use*/}
+
+                        <LoginMenu isLogget={authUser} />
+
                     </div>
                 </div>
             </div>

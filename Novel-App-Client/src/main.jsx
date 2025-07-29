@@ -7,6 +7,8 @@ import MainLayaut from "./Layaut/MainLayaut.jsx";
 import Homepage from "./routes/Homepage.jsx";
 import Login from "./routes/Login.jsx";
 import Register from "./routes/Register.jsx";
+import toast, { Toaster } from 'react-hot-toast';
+
 
 
 const routes = createBrowserRouter([{
@@ -30,7 +32,8 @@ const routes = createBrowserRouter([{
 
 createRoot(document.getElementById('root')).render(
 
-  <StrictMode>
-    <RouterProvider router={routes} />
-  </StrictMode>
+      <StrictMode>
+        <RouterProvider router={routes} />
+          <Toaster  />
+      </StrictMode>
 )

@@ -1,7 +1,22 @@
 import {Link} from "react-router";
 import GoogleButton from "react-google-button";
+import {useState} from "react";
+import toast, { Toaster } from 'react-hot-toast';
+import {registerWithGoogleAuth } from "../lib/firebaseWrapper.js"
 
 const Register = () => {
+
+    const [formData, setFormData] = useState({
+        name: "",
+        email: "",
+        password: "",
+    });
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log("submit: ", formData);
+    }
+
     return (
         <div className={`flex justify-center `}>
             <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
@@ -29,6 +44,7 @@ const Register = () => {
                         minLength="3"
                         maxLength="30"
                         title="Only letters, numbers or dash"
+                        onChange={(e) => {setFormData({...formData, name: e.target.value})}}
                     />
                 </label>
                 {/*email*/}
@@ -46,7 +62,8 @@ const Register = () => {
                             <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
                         </g>
                     </svg>
-                    <input type="email" placeholder="mail@site.com" required />
+                    <input type="email" placeholder="mail@site.com" required
+                           onChange={(e) => {setFormData({...formData, email: e.target.value})}}/>
                 </label>
 
                 <label className="label">Password</label>
@@ -73,16 +90,20 @@ const Register = () => {
                         minLength="8"
                         pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                         title="Must be more than 8 characters, including number, lowercase letter, uppercase letter"
+                        onChange={(e) => {setFormData({...formData, password: e.target.value})}}
                     />
                 </label>
 
-                <button className="btn btn-neutral mt-4">Register</button>
+                <button onClick={handleSubmit}  className="btn btn-neutral mt-4">Register</button>
 
-                <span className={`text-center block`}>You dont have account? <Link to={"/login"} className={``}>Sign out</Link> </span>
+                <span className={`text-center block`}>You dont have account? <Link to={"/login"} className={``}>Sign in</Link> </span>
                 <span className={`text-center block`}>OR</span>
 
                     <div className={`m-auto`}>
-                        <GoogleButton />
+                        <GoogleButton onClick={(e) => {
+                            e.preventDefault();
+                            registerWithGoogleAuth();
+                        }} />
                     </div>
 
             </fieldset>

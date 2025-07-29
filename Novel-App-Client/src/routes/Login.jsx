@@ -54,7 +54,7 @@ const Login = () => {
 
                 <button className="btn btn-neutral mt-4">Login</button>
 
-                <span className={`text-center block`}>You dont have account? <Link to={"/register"} className={``}>Sign out</Link> </span>
+                <span className={`text-center block`}>You dont have account? <Link to={"/register"} className={``}>Sign up</Link> </span>
                 <span className={`text-center block`}>OR</span>
                 <div className={`m-auto`}>
                     <GoogleButton />
