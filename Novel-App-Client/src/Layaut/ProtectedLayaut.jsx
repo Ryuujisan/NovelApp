@@ -1,13 +1,11 @@
+import {useAuthStore} from "../store/useAuthStore.js";
+import React, {useEffect} from "react";
 import Navbar from "../componets/Navbar.jsx";
 import Logo from "../componets/Logo.jsx";
-import React, {useEffect} from "react";
-import {Outlet} from "react-router";
-import toast, { Toaster } from 'react-hot-toast';
+import {Navigate, Outlet} from "react-router";
 import Footers from "../componets/Footers.jsx";
-import {useAuthStore} from "../store/useAuthStore.js";
-import {Loader} from "lucide-react";
 
-const MainLayaut = () => {
+const ProtectedLayaut = () => {
     const{authUser, check, isCheckingAuth} = useAuthStore();
 
     useEffect(() => {
@@ -16,16 +14,20 @@ const MainLayaut = () => {
 
 
     return (
-         <div className="mt-4 m-auto w-[80%]">
+        <div className="mt-4 m-auto w-[80%]">
 
             <Navbar className="mr-auto border" authUser/>
 
             <Logo />
-            <Outlet />
+            {
+            authUser
+                ? <Outlet />
+                : <Navigate to={`/Unauthorization`} />
+             }
             <Footers />
 
         </div>
     )
 };
 
-export default MainLayaut;
+export default ProtectedLayaut;

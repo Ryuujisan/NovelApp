@@ -84,9 +84,24 @@ export const useAuthStore = create((set) => ({
     },
 
     signOut : async () => {
-        await auth.signOut()
+        await auth.auth.signOut();
         set({authUser:null})
-
     },
+
+    updatingProfile : async (data) => {
+        set({isUpdating:true})
+        await auth.updateDisplayName(data.displayName);
+
+        const idToken = await auth.auth.currentUser.getIdToken()
+        try {
+            const updateUser = await axiosInstance.put(`/user/updateProfile`,data, {headers: {Authorization: `Bearer ${idToken}`}});
+            set({authUser:{fbUser : auth.auth.currentUser, user: updateUser.data.user}});
+            toast.success("Profile successfully updated!");
+        } catch (error) {
+            toast.error(`Profile can't update`,error.message);
+        } finally {
+            set({isUpdating:false})
+        }
+    }
 
 }))

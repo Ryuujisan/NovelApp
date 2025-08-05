@@ -6,18 +6,13 @@ const userSchema = mongoose.Schema({
         required: true,
         unique: true,
     },
-    name:{
+    gender : {
         type: String,
-        required: true,
-        unique: true
     },
-    email:{
+    birthday : {
         type: String,
-        required: true,
-        unique: true
     },
-
-    avatar:{
+    location : {
         type: String,
     },
     description:{

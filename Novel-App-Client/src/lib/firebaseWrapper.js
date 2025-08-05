@@ -1,6 +1,11 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 
+import { getStorage,
+    ref,
+    uploadString,
+    getDownloadURL } from 'firebase/storage';
+
 import {getAuth,
     createUserWithEmailAndPassword,
     updateProfile,
@@ -12,6 +17,7 @@ import {getAuth,
 
 import toast from "react-hot-toast"
 import {axiosInstance} from "./axios.js";
+import {Navigate} from "react-router";
 
 ''
 // TODO: Add SDKs for Firebase products that you want to use
@@ -32,8 +38,9 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const storage = getStorage(app);
 
-export {app, auth}
+export {app, auth, storage};
 
 export async function getHeder(user) {
 
@@ -122,7 +129,7 @@ export const loginWithEmail = async (email, password) => {
     })*/
 }
 
-    export const checkSession = async () => {
+export const checkSession = async () => {
 
         await onAuthStateChanged(auth,async user=> {
         if(user){
@@ -215,3 +222,45 @@ export const loginWithGoogleAuth = async () => {
     }
 }
 
+/*
+*
+*  Section for Update profile
+* */
+
+export const uploadAvatar = async (base64ImageString) => {
+    const currentUser = auth.currentUser;
+    if(!currentUser) return;
+
+    const imageRef = ref(storage, `avatars/${currentUser.uid}.png`);
+
+    try
+    {
+        const uploadResult = await uploadString(imageRef, base64ImageString, 'data_url');
+        console.log('Uploaded base64 string to Cloud Storage!', uploadResult);
+
+        const downloadURL = await getDownloadURL(imageRef);
+        console.log('Download URL:', downloadURL);
+
+        await updateProfile(currentUser , {
+            photoURL: downloadURL,
+        });
+
+        console.log('User photo URL updated successfully!');
+        return downloadURL;
+
+    } catch (error) {
+        toast.error("Error during upload image\n", error.message);
+    }
+}
+
+export const updateDisplayName = async (displayName) => {
+    const currentUser = auth.currentUser;
+    if(!currentUser) return;
+    console.log(`==========update display name =====================❤️`);
+    try {
+
+        await updateProfile(currentUser, {displayName: displayName});
+    } catch (error) {
+        console.log(`💀Error during update display name:`, error);
+    }
+}

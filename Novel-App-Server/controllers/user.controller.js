@@ -43,3 +43,16 @@ export const check = async (req, res, next) => {
       return res.status(500).json({msg: "Server internal error", error: error});
   }
 };
+
+export const update = async (req, res) => {
+    const {description, location, birthday, gender} = req.body;
+    const id = req.user.user_id;
+
+    try{
+        const user = await User.findOneAndUpdate({fbID: id}, {description: description, location: location, birthday: birthday, gender: gender});
+        res.status(200).json({user : user});
+
+    } catch (error) {
+        return res.status(400).json({msg: "error", error: error});
+    }
+}

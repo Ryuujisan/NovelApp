@@ -16,11 +16,6 @@ const Login = () => {
         e.preventDefault();
         console.log("submit: ", formData);
         signIn(formData)
-        if(authUser)
-        {
-            const navigate = useNavigate()
-            navigate("/dashboard")
-        }
     }
 
     return (

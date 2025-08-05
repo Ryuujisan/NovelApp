@@ -9,6 +9,9 @@ import Login from "./routes/Login.jsx";
 import Register from "./routes/Register.jsx";
 import { Toaster } from 'react-hot-toast';
 import Dashboard from "./routes/Dashboard.jsx";
+import UnAuthorization from "./routes/UnAuthorization.jsx";
+import ProtectedLayaut from "./Layaut/ProtectedLayaut.jsx";
+import SettingsProfile from "./routes/SettingsProfile.jsx";
 
 
 
@@ -28,11 +31,25 @@ const routes = createBrowserRouter([{
             element: <Register />,
         },
         {
-            path:"/dashboard",
-            element: <Dashboard />,
+            path:"/Unauthorization",
+            element: <UnAuthorization />,
         }
     ]
-}])
+},
+    {
+        element: <ProtectedLayaut />,
+        children:[
+            {
+                path:"/dashboard",
+                element: <Dashboard />,
+            },
+            {
+                path:"/settings",
+                element: <SettingsProfile />,
+            }
+        ]
+    }
+])
 
 
 createRoot(document.getElementById('root')).render(

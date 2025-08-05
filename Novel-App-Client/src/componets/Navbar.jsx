@@ -39,7 +39,7 @@ const Navbar = ({authUser}) => {
                             <div className="w-10 rounded-full">
                                 <img
                                     alt="Avatar"
-                                    src={authUser !== null ? "/avatar.png": '/avatar.png'} />
+                                    src={authUser?.fbUser?.photoURL ?? `/avatar.png`} />
                             </div>
                         </div>
                         {/*Login Use*/}
