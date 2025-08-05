@@ -1,6 +1,11 @@
 import mongoose from "mongoose";
 
 const userSchema = mongoose.Schema({
+    fbID : {
+        type: String,
+        required: true,
+        unique: true,
+    },
     name:{
         type: String,
         required: true,
@@ -11,10 +16,7 @@ const userSchema = mongoose.Schema({
         required: true,
         unique: true
     },
-    password: {
-        type: String,
-        required: true,
-    },
+
     avatar:{
         type: String,
     },

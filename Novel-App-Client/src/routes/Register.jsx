@@ -1,11 +1,13 @@
 import {Link} from "react-router";
 import GoogleButton from "react-google-button";
 import {useState} from "react";
-import toast, { Toaster } from 'react-hot-toast';
 import {registerWithGoogleAuth } from "../lib/firebaseWrapper.js"
+import {useAuthStore} from "../store/useAuthStore.js";
 
 const Register = () => {
 
+    const {isSigningUp, signUp, signUpUsingProvider} = useAuthStore();
+    console.log("isSigninUp", isSigningUp);
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -15,6 +17,7 @@ const Register = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log("submit: ", formData);
+        signUp(formData);
     }
 
     return (
@@ -94,7 +97,7 @@ const Register = () => {
                     />
                 </label>
 
-                <button onClick={handleSubmit}  className="btn btn-neutral mt-4">Register</button>
+                <button onClick={handleSubmit}  className="btn btn-neutral mt-4" disabled={isSigningUp}>{isSigningUp ? "Wait..." : "Register"}</button>
 
                 <span className={`text-center block`}>You dont have account? <Link to={"/login"} className={``}>Sign in</Link> </span>
                 <span className={`text-center block`}>OR</span>

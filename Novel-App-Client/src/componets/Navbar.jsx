@@ -1,13 +1,14 @@
 import {useAuthStore} from "../store/useAuthStore.js";
 import {Link} from "react-router";
 import LoginMenu from "./LoginMenu.jsx";
+import {useEffect} from "react";
 
-const Navbar = () => {
+const Navbar = ({authUser}) => {
     /*TODO:
     Make auth settings
     * */
-    const {authUser} = useAuthStore();
-    console.log(authUser);
+
+
     return(
 
 
@@ -38,7 +39,7 @@ const Navbar = () => {
                             <div className="w-10 rounded-full">
                                 <img
                                     alt="Avatar"
-                                    src={authUser !== null ? authUser.fbUser.photoURL: '/avatar.png'} />
+                                    src={authUser !== null ? "/avatar.png": '/avatar.png'} />
                             </div>
                         </div>
                         {/*Login Use*/}

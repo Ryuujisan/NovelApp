@@ -1,7 +1,28 @@
-import {Link} from "react-router";
+import {Link, useNavigate} from "react-router";
 import GoogleButton from 'react-google-button'
+import {useState} from "react";
+import {useAuthStore} from "../store/useAuthStore.js";
 
 const Login = () => {
+
+    const {isLoggedIn, signIn, authUser} = useAuthStore();
+    const [formData, setFormData] = useState({
+        email: "",
+        password: "",
+    });
+
+    const handleSubmit = (e) => {
+        if(isLoggedIn) return;
+        e.preventDefault();
+        console.log("submit: ", formData);
+        signIn(formData)
+        if(authUser)
+        {
+            const navigate = useNavigate()
+            navigate("/dashboard")
+        }
+    }
+
     return (
         <div className={`flex justify-center `}>
             <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
@@ -22,7 +43,7 @@ const Login = () => {
                             <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
                         </g>
                     </svg>
-                    <input type="email" placeholder="mail@site.com" required />
+                    <input type="email" placeholder="mail@site.com" required onChange={(e) => {setFormData({...formData, email: e.target.value})}}/>
                 </label>
 
                 <label className="label">Password</label>
@@ -49,10 +70,11 @@ const Login = () => {
                         minLength="8"
                         pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                         title="Must be more than 8 characters, including number, lowercase letter, uppercase letter"
+                        onChange={(e) => setFormData({...formData, password: e.target.value})}
                     />
                 </label>
 
-                <button className="btn btn-neutral mt-4">Login</button>
+                <button className="btn btn-neutral mt-4" disabled={isLoggedIn} onClick={e => handleSubmit(e)}>{isLoggedIn ? "Wait..." : "Login"}</button>
 
                 <span className={`text-center block`}>You dont have account? <Link to={"/register"} className={``}>Sign up</Link> </span>
                 <span className={`text-center block`}>OR</span>

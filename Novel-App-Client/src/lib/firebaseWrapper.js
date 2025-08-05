@@ -7,10 +7,10 @@ import {getAuth,
     GoogleAuthProvider,
     signInWithPopup,
     onAuthStateChanged,
-    signInWithEmailAndPassword} from "firebase/auth";
+    signInWithEmailAndPassword,
+} from "firebase/auth";
 
 import toast from "react-hot-toast"
-import axios from "axios";
 import {axiosInstance} from "./axios.js";
 
 ''
@@ -35,9 +35,10 @@ const auth = getAuth(app);
 
 export {app, auth}
 
-async function getHeder(user) {
+export async function getHeder(user) {
 
     const idToken = await user.getIdToken();
+   // console.log(`getHeder: Bearer ${idToken}`);
     return {
         headers : {
             Authorization: `Bearer ${idToken}`
@@ -47,17 +48,24 @@ async function getHeder(user) {
 
 export const registerUserWithEmailAndPassword = async (email, password, name) => {
     createUserWithEmailAndPassword(auth, email.toLowerCase(), password)
-        .then(async user => {
-            toast.success("Account was created successfully!");
+        .then(async (userCredential) => {
+            const user = userCredential.user;
             await updateProfile(user, {
                 displayName: name,
             });
 
-            const res = await axios.post(`/users/register`, {
+            try {
+            await axiosInstance.post(`user/register`, {
                 firebaseUserId: user.uid,
                 email: email,
+                name: name,
             })
-            return {fbUser : user, user: res.data}
+                toast.success("Account was created successfully!");
+                return await loginWithEmail(email, password)
+            } catch (e) {
+                console.log("error res", e)
+            }
+
     }).catch((error) => {
         // Uh oh! Something went wrong during registration.
         const errorCode = error.code;
@@ -78,10 +86,32 @@ export const registerUserWithEmailAndPassword = async (email, password, name) =>
 
 export const loginWithEmail = async (email, password) => {
 
-    signInWithEmailAndPassword(auth, email.toLowerCase(), password).then(async user => {
-        const res = await axios.post(`/users/login`,{fbUser: user, usingProvider: false}, getHeder(user))
-        toast.success("Login successfully!");
-        return {fbUser : user, user: res.data}
+    try {
+        const userCredential = await signInWithEmailAndPassword(auth, email.toLowerCase(), password);
+        const user = userCredential.user;
+
+        try {
+            const res = await axiosInstance.post(`/user/login`, {usingProvider: false}, await getHeder(user));
+
+            return {fbUser: user, user: res.data.user}
+        } catch (e) {
+            console.error("Error logining user:", e)
+        }
+    } catch (error) {
+        if((error.errorCode !== 'auth/too-many-requests')) {
+            toast.error("To many requests have been login! Please try again.");
+        } else {
+            toast.error("Invalid email or password! Please try again.");
+        }
+    }
+
+
+    /*
+     signInWithEmailAndPassword(auth, email.toLowerCase(), password).then(async userCredential => {
+        const user = userCredential.user;
+        const res = await axiosInstance.post(`/user/login`,{fbUser: user, usingProvider: false}, getHeder(user))
+
+        return {fbUser : user, user: res.data.user}
 
     }).catch((error) => {
         if((error.errorCode !== 'auth/too-many-requests')) {
@@ -89,18 +119,21 @@ export const loginWithEmail = async (email, password) => {
         } else {
             toast.error("Invalid email or password! Please try again.");
         }
-    })
+    })*/
 }
 
-export const checkSession = async () => {
-onAuthStateChanged(auth,async user => {
-    if(user){
-        console.log(`user was log, ${user}`)
-        const userdb = await axiosInstance.post(`/user/check`, user, getHeder(user));
-        return {fbUser : user, user: userdb};
+    export const checkSession = async () => {
+
+        await onAuthStateChanged(auth,async user=> {
+        if(user){
+
+            const res = await axiosInstance.get(`/user/check`, await getHeder(user));
+            console.log(`res user: ${res.data.user}`);
+            return {fbUser : user, user: res.data.user};
+        }
+    })
+
     }
-})
-}
 
 export const signOut = async () => {
     try {
@@ -117,9 +150,10 @@ export const registerWithGoogleAuth = async () => {
 
     try {
         const result = await signInWithPopup(auth, provider);
-        await axios.post("api/user/register", {userId: result.user.uid, email: result.user.email})
+        const res = await axiosInstance.post("/user/register", {userId: result.user.uid, email: result.user.email, password: ""})
 
         toast.success("Register successfully!");
+        return {fbUser: result.user, user: res.data.user};
     } catch (error) {
         // This is the "callback" part for failure!
         const errorCode = error.code;
@@ -151,10 +185,10 @@ export const loginWithGoogleAuth = async () => {
 
     try {
         const result = await signInWithPopup(auth, provider);
-        const res = await axios.post("api/user/login", {fbUser: result.user, usingProvider: true}, getHeder(result.user))
+        const res = await axiosInstance.post("api/user/login", {fbUser: result.user, usingProvider: true}, getHeder(result.user))
 
         toast.success("login successfully!");
-        return {fbUser : result.user, user: res.data}
+        return {fbUser : result.user, user: res.data.user}
     }catch (error) {
         // This is the "callback" part for failure!
         const errorCode = error.code;
@@ -168,7 +202,7 @@ export const loginWithGoogleAuth = async () => {
             console.warn("Another popup request was already in progress.");
         } else if (errorCode === 'auth/account-exists-with-different-credential') {
             // Handle linking accounts if an account already exists with the same email
-            console.error("Account already exists with different credential.");
+            toast.error("Account already exists with different credential.");
         }
         // ... more error handling
 

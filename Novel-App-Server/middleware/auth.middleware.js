@@ -1,6 +1,6 @@
 import admin from 'firebase-admin';
 
-const config = require(`../novel-app-dc899-firebase-adminsdk-fbsvc-5a153ac6d7.json`)
+import config from "../novel-app-dc899-firebase-adminsdk-fbsvc-5a153ac6d7.json" with { type: 'json' };
 
 admin.initializeApp({
     credential: admin.credential.cert(config)
@@ -18,7 +18,7 @@ export const checkAuth = async (req, res, next) => {
     const idToken = authHeader.split('Bearer ')[1];
 
     try {
-
+        const decodedToken = await admin.auth().verifyIdToken(idToken);
         console.log("Server-side Decoded Firebase ID Token:", decodedToken);
 
         // Attach the decoded token to the request object for later use in route handlers

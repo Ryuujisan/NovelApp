@@ -5,21 +5,30 @@ import {Outlet} from "react-router";
 import toast, { Toaster } from 'react-hot-toast';
 import Footers from "../componets/Footers.jsx";
 import {useAuthStore} from "../store/useAuthStore.js";
+import {Loader} from "lucide-react";
 
 const MainLayaut = () => {
-    const{authUser, checkAuth, isCheckingAuth} = useAuthStore();
+    const{authUser, check, isCheckingAuth} = useAuthStore();
 
     useEffect(() => {
-        checkAuth()
-    }, [checkAuth]);
+        check()
+    }, [check]);
+
+    if(isCheckingAuth && !authUser) {
+        <div className={`flex items-center justify-center h-screen`}>
+            <Loader className={`size-10 animate-spin`} />
+        </div>
+    }
 
     return (
-        <div className="mt-4 m-auto w-[80%]">
-            <Navbar className="mr-auto border" />
+         <div className="mt-4 m-auto w-[80%]">
+
+            <Navbar className="mr-auto border" authUser/>
 
             <Logo />
             <Outlet />
             <Footers />
+
         </div>
     )
 };

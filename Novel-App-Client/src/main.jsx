@@ -7,7 +7,8 @@ import MainLayaut from "./Layaut/MainLayaut.jsx";
 import Homepage from "./routes/Homepage.jsx";
 import Login from "./routes/Login.jsx";
 import Register from "./routes/Register.jsx";
-import toast, { Toaster } from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
+import Dashboard from "./routes/Dashboard.jsx";
 
 
 
@@ -25,6 +26,10 @@ const routes = createBrowserRouter([{
         {
             path:"/register",
             element: <Register />,
+        },
+        {
+            path:"/dashboard",
+            element: <Dashboard />,
         }
     ]
 }])

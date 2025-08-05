@@ -1,8 +1,11 @@
 import {Link} from "react-router";
+import {useAuthStore} from "../store/useAuthStore.js";
 
 const LoginMenu = ({isLogget}) => {
 
-    if(isLogget)
+    const {signOut, authUser} = useAuthStore();
+    console.log(`logged in`, authUser);
+    if(authUser)
     {
     return (
         <ul
@@ -14,7 +17,11 @@ const LoginMenu = ({isLogget}) => {
                 </a>
             </li>
             <li><a>Settings</a></li>
-            <li><a>Logout</a></li>
+            <li><button onClick={(e) =>{
+                e.preventDefault();
+                console.log("clicked logut")
+                signOut();
+            }}>Logout</button></li>
         </ul>
     )} else {
         return (
